@@ -9,10 +9,9 @@
 
 using namespace std; // instead of std:: 
 
-int main(){
-    ifstream file("input2D_float.txt"); 
+vector<pair<double, double>> fileread(const string& input_file){ // string input 
+    ifstream file(input_file); 
     vector<pair<double, double>> dataset;
-
     string line;
     while(getline(file, line)){
         stringstream s(line);
@@ -22,12 +21,31 @@ int main(){
             dataset.emplace_back(x, y); // add directly to the vector
             }
         }
-    file.close(); // safe practice
+    return dataset;
+}
 
-    for (const auto& [x, y]: dataset){ 
-        // const ensures the elements are not modified 
-        // auto to know the type automatically 
-        cout << '(' << x << ',' << y << ')' << '\n';
-    }
+void print(const vector<pair<double, double>>& dataset, int n){
+    if (n < dataset.size()){
+        for(int i = 0; i < n && i < dataset.size(); i++){
+            const auto& [x, y] = dataset[i];
+            // const ensures the elements are not modified 
+            // auto to know the type automatically 
+            cout << '(' << x << ',' << y << ')' << '\n';
+        }
+    } else {
+        cout << "Warning! " << '\n';
+        for(int i = 0; i < 5 ; i++){
+            const auto& [x, y] = dataset[i];
+            cout << '(' << x << ',' << y << ')' << '\n';
+        }
+    }   
+}
+
+int main(){
+    vector<pair<double, double>> dataset = fileread("input2D_float.txt");
+    int n;
+    cout << "Provide the number of lines you want to print: ";
+    cin >> n;
+    print(dataset, n);
     return 0;
 }
