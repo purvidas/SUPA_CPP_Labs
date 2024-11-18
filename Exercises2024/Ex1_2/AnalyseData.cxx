@@ -10,9 +10,6 @@
 using namespace std; // instead of std:: 
 
 int main(){
-    // ifstream file("input2D_float.txt"); 
-
-
     ifstream file("input2D_float.txt"); 
     vector<pair<double, double>> dataset;
 
@@ -21,13 +18,15 @@ int main(){
         stringstream s(line);
         double x, y;
         char c;
-        while(s >> x >> c >> y){
-            dataset.emplace_back(x, y);
+        while(s >> x >> c >> y){ // because of ,
+            dataset.emplace_back(x, y); // add directly to the vector
             }
         }
-    file.close();
+    file.close(); // safe practice
 
-    for (const auto& [x, y]: dataset){
+    for (const auto& [x, y]: dataset){ 
+        // const ensures the elements are not modified 
+        // auto to know the type automatically 
         cout << '(' << x << ',' << y << ')' << '\n';
     }
     return 0;
