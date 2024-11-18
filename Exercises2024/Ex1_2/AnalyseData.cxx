@@ -6,6 +6,7 @@
 #include <string>
 #include <vector> 
 #include <utility>
+#include <cmath>
 
 using namespace std; // instead of std:: 
 
@@ -24,19 +25,27 @@ vector<pair<double, double>> fileread(const string& input_file){ // string input
     return dataset;
 }
 
-void print(const vector<pair<double, double>>& dataset, int n){
+vector<double> magnitude(const vector<pair<double, double>>& dataset){
+    vector<double> m; 
+    for(const auto& [x, y] : dataset){
+        m.push_back(sqrt(pow(x, 2) + pow(y, 2)));
+    }
+    return m; 
+}
+
+void print(const vector<pair<double, double>>& dataset, vector<double> magnitude, int n){
     if (n < dataset.size()){
         for(int i = 0; i < n && i < dataset.size(); i++){
             const auto& [x, y] = dataset[i];
             // const ensures the elements are not modified 
             // auto to know the type automatically 
-            cout << '(' << x << ',' << y << ')' << '\n';
+            cout << '(' << x << ',' << y << ')' << " = " << magnitude[i] << '\n';
         }
     } else {
         cout << "Warning! " << '\n';
         for(int i = 0; i < 5 ; i++){
             const auto& [x, y] = dataset[i];
-            cout << '(' << x << ',' << y << ')' << '\n';
+            cout << '(' << x << ',' << y << ')' << " = " << magnitude[i] << '\n';
         }
     }   
 }
@@ -46,6 +55,7 @@ int main(){
     int n;
     cout << "Provide the number of lines you want to print: ";
     cin >> n;
-    print(dataset, n);
+    vector<double> magnitude_data = magnitude(dataset);
+    print(dataset, magnitude_data, n);
     return 0;
 }
