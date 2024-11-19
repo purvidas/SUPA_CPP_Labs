@@ -19,5 +19,8 @@ int main(){
     else{
         print(dataset, magnitude_output, n, true);               
     }
+
+    leastsquare(dataset, "output.txt");
+
     return 0;
 }

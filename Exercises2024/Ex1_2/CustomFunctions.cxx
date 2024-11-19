@@ -66,3 +66,28 @@ void print(const vector<pair<double, double>>& dataset, vector<double>& magnitud
     }
   
 }
+
+void leastsquare(const vector<pair<double, double>>& dataset, const string& outputfile){
+    float sum_x = 0, sum_y = 0, sum_xx = 0, sum_xy = 0;
+    for(int i = 0; i < dataset.size(); i++){
+        const auto& [x, y] = dataset[i];
+        sum_x += x;
+        sum_y += y;
+        sum_xx += x*x;
+        sum_xy += x*y;
+    }
+    float n = dataset.size();
+    float m = ((n * sum_xy) - (sum_x * sum_y))/((n * sum_xx) - (sum_x * sum_x));
+    float c = ((sum_y * sum_xx) - (sum_x * sum_xy))/((n * sum_xx) - (sum_x * sum_x));
+
+    stringstream leastsquarestring;
+    leastsquarestring << "y = "<< m << "x + "<< c;
+    string functionstring = leastsquarestring.str();
+    cout<<"The best fit value of the curve for the given dataset is : "<< functionstring <<endl;
+
+    ofstream output(outputfile);
+    output.is_open();
+    output << functionstring;
+    output.close();
+    cout << "Saved the best fit in: " << outputfile << endl;
+}
