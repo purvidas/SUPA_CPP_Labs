@@ -4,9 +4,8 @@
 #include "CustomFunctions.h"
 
 int main(){
+    int n, output, leastsquare_bool;
     vector<pair<double, double>> dataset = fileread("input2D_float.txt");
-    vector<double> magnitude_output = magnitude(dataset);
-    int n, output; 
 
     cout << "1. Dataset \n2. Dataset with Magnitude \nWhat do you want?: ";
     cin >> output; 
@@ -14,13 +13,19 @@ int main(){
     cin >> n;
 
     if(output == 1){
-        print(dataset, magnitude_output, n, false);
+        print(dataset, n, false);               
     }
     else{
-        print(dataset, magnitude_output, n, true);               
+        print(dataset, n, true);
     }
+    cout << "Do you want the best fit of the dataset?: \n1. Yes \n2. No\n";
+    cin >> leastsquare_bool;
+    string leastsquare_output = leastsquare(dataset);
 
-    leastsquare(dataset, "output.txt");
-
-    return 0;
+    if (leastsquare_bool == 1){
+        print(leastsquare_output, "output.txt");
+    }
+    else{
+        return 0;
+    }
 }
