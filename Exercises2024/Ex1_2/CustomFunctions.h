@@ -8,7 +8,7 @@ using namespace std; // std:: in namespace
 
 vector<pair<double, double>> fileread(const string& input_file);
 
-string leastsquare(const vector<pair<double, double>>& dataset);
+string leastsquare(const vector<pair<double, double>>& dataset, const vector<pair<double, double>>& error);
 
 void print(const vector<pair<double, double>>& dataset, vector<double>& magnitude, int n, bool magnitude_needed);
 

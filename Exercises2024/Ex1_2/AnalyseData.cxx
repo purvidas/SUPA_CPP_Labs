@@ -6,6 +6,7 @@
 int main(){
     int n, output, leastsquare_bool;
     vector<pair<double, double>> dataset = fileread("input2D_float.txt");
+    vector<pair<double, double>> error = fileread("error2D_float.txt");
 
     cout << "1. Dataset \n2. Dataset with Magnitude \nWhat do you want?: ";
     cin >> output; 
@@ -18,9 +19,9 @@ int main(){
     else{
         print(dataset, n, true);
     }
-    cout << "Do you want the best fit of the dataset?: \n1. Yes \n2. No\n";
+    cout << "Do you want the fits (best and X^2) of the dataset?: \n1. Yes \n2. No\n";
     cin >> leastsquare_bool;
-    string leastsquare_output = leastsquare(dataset);
+    string leastsquare_output = leastsquare(dataset, error);
 
     if (leastsquare_bool == 1){
         print(leastsquare_output, "output.txt");
