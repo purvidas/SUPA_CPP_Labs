@@ -1,1 +1,2 @@
-y = 0.126265x + 2.02628
+The best fit value of the curve for the given dataset is : y = 0.126265x + 2.02628
+X^2/NDF is 34401.9

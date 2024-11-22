@@ -14,4 +14,6 @@ void print(const vector<pair<double, double>>& dataset, vector<double>& magnitud
 
 void print(const string& leastsquare_output);
 
+void print(const vector<pair<double, double>>& dataset);
+
 #endif

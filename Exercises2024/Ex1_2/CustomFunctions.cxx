@@ -27,19 +27,21 @@ vector<pair<double, double>> fileread(const string& input_file){ // string input
 
 string leastsquare(const vector<pair<double, double>>& dataset, const vector<pair<double, double>>& error){
     float sum_x = 0, sum_y = 0, sum_xx = 0, sum_xy = 0, chi_squared = 0, chi, y_i;
-    for(int i = 0; i < dataset.size(); i++){
+    float n = dataset.size();
+
+    for(int i = 0; i < n; i++){
         const auto& [x, y] = dataset[i];
         sum_x += x;
         sum_y += y;
         sum_xx += x*x;
         sum_xy += x*y;
     }
-    float n = dataset.size();
+
     float m = ((n * sum_xy) - (sum_x * sum_y))/((n * sum_xx) - (sum_x * sum_x));
     float c = ((sum_y * sum_xx) - (sum_x * sum_xy))/((n * sum_xx) - (sum_x * sum_x));
     float ndf = n - 2;
 
-    for(int j = 0; j < dataset.size(); j++) {
+    for(int j = 0; j < n; j++) {
         const auto& [x, y] = dataset[j];
         const auto& [x_e, y_e] = error[j];
         y_i = m * x + c; // y of the model
@@ -51,10 +53,18 @@ string leastsquare(const vector<pair<double, double>>& dataset, const vector<pai
 
     stringstream leastsquarestring;
     leastsquarestring << "The best fit value of the curve for the given dataset is : y = " << m << "x + " << c << '\n';
-    leastsquarestring << "X^2 fit/ chi is " << chi;
+    leastsquarestring << "X^2/NDF is " << chi;
     string functionstring = leastsquarestring.str();
 
     return functionstring;
+}
+
+double powerfunction(double x, double y){
+    int y_int = round(y);  // converting to int
+    if (y == 0) return 1;
+    if (y_int < 0) 
+        return 1 / powerfunction(x, -y_int); // for negatives 
+    return (x * powerfunction(x, y_int - 1));
 }
 
 // keeping all the print in void print 
@@ -92,4 +102,12 @@ void print(const string& leastsquare_output, const string& outputfile){
     output << leastsquare_output;
     output.close();
     cout << "Saved the best fit and X^2 fit in: " << outputfile << endl;
+}
+
+void print(const vector<pair<double, double>>& dataset){
+    cout << "x^y dataset is: " << endl; 
+    for (const auto& [x, y] : dataset){
+        double power = powerfunction(x, y);
+        cout << power << endl;
+    }    
 }
