@@ -10,6 +10,7 @@
 
 using namespace std; // std:: in namespace 
 
+// to read file
 vector<pair<double, double>> fileread(const string& input_file){ // string input 
     ifstream file(input_file); 
     vector<pair<double, double>> dataset;
@@ -25,6 +26,45 @@ vector<pair<double, double>> fileread(const string& input_file){ // string input
     return dataset;
 }
 
+// dataset and magnitude
+void outfile(ostream& output, const vector<pair<double, double>>& dataset, int n, bool magnitude_needed){
+    if (n <= dataset.size()){
+    for(int i = 0; i < n && i < dataset.size(); i++){
+        const auto& [x, y] = dataset[i];
+        output << '(' << x << ',' << y << ')';
+        if(magnitude_needed == true){
+            double magnitude = sqrt(pow(x,2) + pow(y,2)); // directly calculating magnitude 
+            output << " = " << magnitude;
+            }
+        output << '\n';
+        }
+    } else {
+    output << "Warning! Number of lines exceeded! " << '\n';
+    for(int i = 0; i < 5 ; i++){
+        const auto& [x, y] = dataset[i];
+        output << '(' << x << ',' << y << ')';
+        if(magnitude_needed == true){
+            double magnitude = sqrt(pow(x,2) + pow(y,2));
+            output << " = " << magnitude;
+            }
+        output << '\n';
+        }
+    }  
+}
+
+void print(const vector<pair<double, double>>& dataset, int n, bool magnitude_needed){
+    outfile(cout, dataset, n, magnitude_needed);
+}
+
+void fileprint(const vector<pair<double, double>>& dataset, int n, bool magnitude_needed, const string& outputfile){
+    ofstream output(outputfile);
+    output.is_open();
+    outfile(cout, dataset, n, magnitude_needed);
+    output.close();
+    cout << "Saved the results in: " << outputfile << endl;
+}
+
+// leastsquare
 string leastsquare(const vector<pair<double, double>>& dataset, const vector<pair<double, double>>& error){
     float sum_x = 0, sum_y = 0, sum_xx = 0, sum_xy = 0, chi_squared = 0, chi, y_i;
     float n = dataset.size();
@@ -59,6 +99,19 @@ string leastsquare(const vector<pair<double, double>>& dataset, const vector<pai
     return functionstring;
 }
 
+void print(const string& leastsquare_output){
+    cout << leastsquare_output <<endl;
+}
+
+void fileprint(const string& string_output, const string& outputfile){
+    ofstream output(outputfile);
+    output.is_open();
+    output << string_output;
+    output.close();
+    cout << "Saved the results in: " << outputfile << endl;
+}
+
+// power function
 double powerfunction(double x, double y){
     int y_int = round(y);  // converting to int
     if (y == 0) return 1;
@@ -67,47 +120,22 @@ double powerfunction(double x, double y){
     return (x * powerfunction(x, y_int - 1));
 }
 
-// keeping all the print in void print 
-
-void print(const vector<pair<double, double>>& dataset, int n, bool magnitude_needed){
-    if (n <= dataset.size()){
-    for(int i = 0; i < n && i < dataset.size(); i++){
-        const auto& [x, y] = dataset[i];
-        cout << '(' << x << ',' << y << ')';
-        if(magnitude_needed == true){
-            double magnitude = sqrt(pow(x,2) + pow(y,2)); // directly calculating magnitude 
-            cout << " = " << magnitude;
-            }
-        cout << '\n';
-        }
-    } else {
-    cout << "Warning! Number of lines exceeded! " << '\n';
-    for(int i = 0; i < 5 ; i++){
-        const auto& [x, y] = dataset[i];
-        cout << '(' << x << ',' << y << ')';
-        if(magnitude_needed == true){
-            double magnitude = sqrt(pow(x,2) + pow(y,2));
-            cout << " = " << magnitude;
-            }
-        cout << '\n';
-        }
-    }  
-}
-
-void print(const string& leastsquare_output, const string& outputfile){
-    cout << leastsquare_output <<endl;
-
-    ofstream output(outputfile);
-    output.is_open();
-    output << leastsquare_output;
-    output.close();
-    cout << "Saved the best fit and X^2 fit in: " << outputfile << endl;
+void outfile(ostream& output, const vector<pair<double, double>>& dataset){
+    output << "x^y dataset is: " << endl; 
+    for (const auto& [x, y] : dataset){
+        double power = powerfunction(x, y);
+        output << power << endl;
+    }    
 }
 
 void print(const vector<pair<double, double>>& dataset){
-    cout << "x^y dataset is: " << endl; 
-    for (const auto& [x, y] : dataset){
-        double power = powerfunction(x, y);
-        cout << power << endl;
-    }    
+    outfile(cout, dataset);  
+}
+
+void fileprint(const vector<pair<double, double>>& dataset, const string& outputfile){
+    ofstream output(outputfile);
+    output.is_open();
+    outfile(output, dataset); 
+    output.close();
+    cout << "Saved the results in: " << outputfile << endl;
 }
