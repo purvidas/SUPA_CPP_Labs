@@ -59,7 +59,7 @@ void print(const vector<pair<double, double>>& dataset, int n, bool magnitude_ne
 void fileprint(const vector<pair<double, double>>& dataset, int n, bool magnitude_needed, const string& outputfile){
     ofstream output(outputfile);
     output.is_open();
-    outfile(cout, dataset, n, magnitude_needed);
+    outfile(output, dataset, n, magnitude_needed);
     output.close();
     cout << "Saved the results in: " << outputfile << endl;
 }
