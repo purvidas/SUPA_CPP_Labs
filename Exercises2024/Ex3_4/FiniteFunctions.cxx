@@ -3,6 +3,7 @@
 #include <vector>
 #include "FiniteFunctions.h"
 #include <filesystem> //To check extensions in a nice way
+#include <random>
 
 #include "gnuplot-iostream.h" //Needed to produce plots (not part of the course) 
 
@@ -248,4 +249,36 @@ void FiniteFunction::generatePlot(Gnuplot &gp){
     gp << "plot '-' with points ps 2 lc rgb 'blue' title 'sampled data'\n";
     gp.send1d(m_samples);
   }
+}
+
+// metropolis sampling method
+// Update : Dec 9, 2024
+std::vector<double> FiniteFunction::metropolisSampling(int numSamples, double stepSize) {
+    std::vector<double> samples;
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<> dis(m_RMin, m_RMax);
+    std::normal_distribution<> normalDist(0.0, stepSize);
+
+    double xi = dis(gen); // step 2.1.1
+    samples.push_back(xi);
+
+    for (int i = 1; i < numSamples; ++i) { 
+        double y = xi + normalDist(gen); // step 2.1.2
+        if (y < m_RMin || y > m_RMax) {  
+            continue;  
+        }
+
+        double A = std::min(callFunction(y) / callFunction(xi), 1.0); // step 2.1.3
+        double T = dis(gen);
+
+        if (T < A) { // step 2.1.4
+            xi = y;  
+        }
+
+        samples.push_back(xi);  // step 2.1.5
+    }
+
+    return samples;
 }
