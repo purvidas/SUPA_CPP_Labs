@@ -1,4 +1,5 @@
 // Purvi Das, Dec 9, 2024
+// University of Glasgow
 
 #include <iostream>
 #include <cmath>

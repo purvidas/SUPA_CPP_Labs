@@ -1,4 +1,5 @@
 // Purvi Das, Dec 8, 2024
+// University of Glasgow
 
 #include "FiniteFunctions.h"
 #include <cmath>
